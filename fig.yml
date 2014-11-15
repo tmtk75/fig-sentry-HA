@@ -1,0 +1,40 @@
+haproxy:
+  image: dockerfile/haproxy
+  volumes:
+    - .:/haproxy-override
+  ports:
+    - "9000:80"
+    - "8080:8080"
+  links:
+    - "sentry1:sentry1"
+    - "sentry2:sentry2"
+
+sentry1:
+  image: slafs/sentry
+  volumes:
+    - "./data/sentry:/data"
+  environment:
+    SECRET_KEY: abcd1234
+    SENTRY_URL_PREFIX: http://192.168.59.103:9000
+    DATABASE_URL: postgres://postgres:@postgresdb/postgres
+  links:
+    - postgres:postgresdb
+
+sentry2:
+  image: slafs/sentry
+  volumes:
+    - "./data/sentry:/data"
+  environment:
+    SECRET_KEY: abcd1234
+    SENTRY_URL_PREFIX: http://192.168.59.103:9000
+    DATABASE_URL: postgres://postgres:@postgresdb/postgres
+  links:
+    - postgres:postgresdb
+
+postgres:
+  image: postgres
+  volumes:
+    - ./data/postgres:/data
+  ports:
+    - "5432:5432"
+

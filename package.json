@@ -1,0 +1,6 @@
+{
+  "name": "fig-sentry-ha",
+  "dependencies": {
+    "raven": "*"
+  }
+}
